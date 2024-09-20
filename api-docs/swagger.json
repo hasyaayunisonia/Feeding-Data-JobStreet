@@ -1,0 +1,852 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Sample API",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/export-excel": {
+      "get": {
+        "summary": "Export job data to Excel",
+        "description": "Fetches job data from the database and exports it as an Excel (.xlsx) file.",
+        "produces": [
+          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        ],
+        "responses": {
+          "200": {
+            "description": "Excel file containing job data",
+            "content": {
+              "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary",
+                  "example": "Binary Excel file download"
+                }
+              }
+            },
+            "headers": {
+              "Content-Type": {
+                "description": "The MIME type for the Excel file",
+                "schema": {
+                  "type": "string",
+                  "example": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                }
+              },
+              "Content-Disposition": {
+                "description": "Specifies that the response is a downloadable file",
+                "schema": {
+                  "type": "string",
+                  "example": "attachment; filename=jobs-data.xlsx"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Error fetching or exporting data"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/search": {
+      "get": {
+        "summary": "Search for jobs based on keywords",
+        "parameters": [
+          {
+            "name": "keyword",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "All"
+            },
+            "description": "Keyword for finding work"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of jobs based on keyword",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "integer",
+                        "example": 262
+                      },
+                      "tag": {
+                        "type": "string",
+                        "example": "Java Spring"
+                      },
+                      "company_name": {
+                        "type": "string",
+                        "example": "PT Coding Abadi"
+                      },
+                      "job_location": {
+                        "type": "string",
+                        "example": "Bandung"
+                      },
+                      "title": {
+                        "type": "string",
+                        "example": "Full Stack Developer"
+                      },
+                      "classification": {
+                        "type": "string",
+                        "example": "Teknologi Informasi & Komunikasi"
+                      },
+                      "subclassification": {
+                        "type": "string",
+                        "nullable": true,
+                        "example": "Developer/Programmer"
+                      },
+                      "salary": {
+                        "type": "string",
+                        "nullable": true,
+                        "example": "Rp 7.000.000 – Rp 12.000.000 per month"
+                      },
+                      "work_type": {
+                        "type": "string",
+                        "example": "Full Time"
+                      },
+                      "teaser": {
+                        "type": "string",
+                        "example": "Experienced Java Developer with min 2 years of working experience in the same field"
+                      },
+                      "work_arrangements": {
+                        "type": "string",
+                        "example": "Kantor"
+                      },
+                      "other_info": {
+                        "type": "string",
+                        "example": "Competitive salary based on your performance, Comfortable and enjoyable work enviroment, Career growth"
+                      },
+                      "date": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2024-09-18T04:26:03.000Z"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/{id}": {
+      "get": {
+        "summary": "Get job based on id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "example": 1
+            },
+            "description": "id of the job to be retrieved"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Job data by id",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer"
+                    },
+                    "tag": {
+                      "type": "string"
+                    },
+                    "company_name": {
+                      "type": "string"
+                    },
+                    "job_location": {
+                      "type": "string"
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "classification": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "subclassification": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "salary": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "work_type": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "teaser": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "work_arrangements": {
+                      "type": "string"
+                    },
+                    "other_info": {
+                      "type": "string"
+                    },
+                    "date": {
+                      "type": "string",
+                      "format": "date-time",
+                      "example": "2024-09-17T07:02:08.000Z"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Job not found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete job based on id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "example": 1
+            },
+            "description": "id of the job to be retrieved"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Job deleted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Job deleted successfully"
+                    },
+                    "job": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "tag": {
+                          "type": "string"
+                        },
+                        "company_name": {
+                          "type": "string"
+                        },
+                        "job_location": {
+                          "type": "string"
+                        },
+                        "title": {
+                          "type": "string"
+                        },
+                        "classification": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "subclassification": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "salary": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "work_type": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "teaser": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "work_arrangements": {
+                          "type": "string"
+                        },
+                        "other_info": {
+                          "type": "string"
+                        },
+                        "date": {
+                          "type": "string",
+                          "format": "date-time",
+                          "example": "2024-09-17T07:02:08.000Z"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Job not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Job not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Server error"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Job updates based on id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "id you want to update",
+            "schema": {
+              "type": "integer",
+              "example": 1
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "tag": {
+                    "type": "string",
+                    "example": "ReactJS"
+                  },
+                  "company_name": {
+                    "type": "string",
+                    "example": "PT Sejahtera"
+                  },
+                  "job_location": {
+                    "type": "string",
+                    "example": "Bandung"
+                  },
+                  "title": {
+                    "type": "string",
+                    "example": "Front End Developer"
+                  },
+                  "classification": {
+                    "type": "string",
+                    "nullable": true,
+                    "example": "Teknologi Informasi"
+                  },
+                  "subclassification": {
+                    "type": "string",
+                    "nullable": true,
+                    "example": "Pengembang"
+                  },
+                  "salary": {
+                    "type": "string",
+                    "nullable": true,
+                    "example": "Rp 7.000.000 – Rp 12.000.000 per month"
+                  },
+                  "work_type": {
+                    "type": "string",
+                    "nullable": true,
+                    "example": "Full Time"
+                  },
+                  "teaser": {
+                    "type": "string",
+                    "nullable": true,
+                    "example": "Lowongan menarik untuk developer"
+                  },
+                  "work_arrangements": {
+                    "type": "string",
+                    "nullable": true,
+                    "example": "Remote"
+                  },
+                  "other_info": {
+                    "type": "string",
+                    "nullable": true,
+                    "example": "BPJS dan asuransi kesehatan"
+                  },
+                  "date": {
+                    "type": "string",
+                    "format": "date-time",
+                    "example": "2024-09-18T07:02:08.000Z"
+                  }
+                },
+                "required": [
+                  "tag",
+                  "company_name",
+                  "job_location",
+                  "title",
+                  "date"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Job updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Job updated successfully"
+                    },
+                    "job": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer",
+                          "example": 1
+                        },
+                        "tag": {
+                          "type": "string",
+                          "example": "ReactJS"
+                        },
+                        "company_name": {
+                          "type": "string",
+                          "example": "PT Sejahtera"
+                        },
+                        "job_location": {
+                          "type": "string",
+                          "example": "Bandung"
+                        },
+                        "title": {
+                          "type": "string",
+                          "example": "Front End Developer"
+                        },
+                        "classification": {
+                          "type": "string",
+                          "example": "Teknologi & Informasi"
+                        },
+                        "subclassification": {
+                          "type": "string",
+                          "example": "Developer/Programmer"
+                        },
+                        "salary": {
+                          "type": "integer",
+                          "nullable": true,
+                          "example": "Rp 7.000.000 – Rp 12.000.000 per month"
+                        },
+                        "work_type": {
+                          "type": "string",
+                          "example": "Full Time"
+                        },
+                        "teaser": {
+                          "type": "string",
+                          "example": "Don't miss this chance to learn, grow and launch excellent career with us. Apply today discover the limitless possibilities."
+                        },
+                        "work_arrangements": {
+                          "type": "string",
+                          "example": "Remote"
+                        },
+                        "other_info": {
+                          "type": "string",
+                          "example": "Career Growth, Competitive Salary"
+                        },
+                        "date": {
+                          "type": "string",
+                          "format": "date-time",
+                          "example": "2024-09-18T07:02:08.000Z"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Required fields missing"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Job not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Job not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Server error"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/": {
+      "post": {
+        "summary": "Create a new job",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "tag": {
+                    "type": "string"
+                  },
+                  "company_name": {
+                    "type": "string"
+                  },
+                  "job_location": {
+                    "type": "string"
+                  },
+                  "title": {
+                    "type": "string"
+                  },
+                  "classification": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "subclassification": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "salary": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "work_type": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "teaser": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "work_arrangements": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "other_info": {
+                    "type": "string",
+                    "nullable": true
+                  },
+                  "date": {
+                    "type": "string",
+                    "format": "date-time",
+                    "example": "2024-09-17T07:02:08.000Z"
+                  }
+                },
+                "required": [
+                  "tag",
+                  "company_name",
+                  "job_location",
+                  "title",
+                  "date"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Job created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Job created successfully"
+                    },
+                    "job": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "tag": {
+                          "type": "string"
+                        },
+                        "company_name": {
+                          "type": "string"
+                        },
+                        "job_location": {
+                          "type": "string"
+                        },
+                        "title": {
+                          "type": "string"
+                        },
+                        "classification": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "subclassification": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "salary": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "work_type": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "teaser": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "work_arrangements": {
+                          "type": "string"
+                        },
+                        "other_info": {
+                          "type": "string"
+                        },
+                        "date": {
+                          "type": "string",
+                          "format": "date-time",
+                          "example": "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Required fields missing"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Server error"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/scrape-filter-data/{tag}": {
+      "get": {
+        "summary": "Generate data using scraping based on keywords",
+        "parameters": [
+          {
+            "name": "tag",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": ".Net Core"
+            },
+            "description": "id of the job to be retrieved"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "bulletPoints": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        },
+                        "example": [
+                          "Career growth in software development",
+                          "Positive working environment"
+                        ]
+                      },
+                      "classificationDescription": {
+                        "type": "string",
+                        "example": "Teknologi Informasi & Komunikasi"
+                      },
+                      "advertiserDescription": {
+                        "type": "string",
+                        "example": "PT Pro Sigmaka Mandiri"
+                      },
+                      "location": {
+                        "type": "string",
+                        "example": "Jakarta Raya"
+                      },
+                      "jobLocationLabel": {
+                        "type": "string",
+                        "example": "Jakarta Raya"
+                      },
+                      "listingDate": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2024-09-11T04:56:33Z"
+                      },
+                      "salary": {
+                        "type": "string",
+                        "example": "Rp 15.000.000 – Rp 20.000.000 per month"
+                      },
+                      "subClassificationDescription": {
+                        "type": "string",
+                        "example": "Developer/Programmer"
+                      },
+                      "workType": {
+                        "type": "string",
+                        "example": "Kontrak"
+                      },
+                      "workArrangementsLabels": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        },
+                        "example": ["Kantor"]
+                      },
+                      "title": {
+                        "type": "string",
+                        "example": ".Net Developer"
+                      },
+                      "teaser": {
+                        "type": "string",
+                        "example": "Responsibility: Design web applications for business systems To write code and apply knowledge to adapt and test applications Provide support and..."
+                      },
+                      "tag": {
+                        "type": "string",
+                        "example": ".Net Core"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Server error"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
