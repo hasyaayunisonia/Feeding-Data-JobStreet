@@ -76,7 +76,7 @@ Replace your_username, your_password, and other details accordingly.
 To start the application, run:
 
 ```
-node run server.js
+node server.js
 ```
 
 This will start the server on http://localhost:3000.

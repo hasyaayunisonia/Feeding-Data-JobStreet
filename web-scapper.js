@@ -1,5 +1,6 @@
 const axios = require("axios");
 const cheerio = require("cheerio");
+const logger = require("./logger");
 
 async function scrapeJobData(jobType) {
   try {
@@ -20,7 +21,7 @@ async function scrapeJobData(jobType) {
     });
 
     // Tambahkan logging untuk debug
-    // console.log('Script Content:', scriptContent);
+    logger.debug(`Script Content: ${scriptContent}`);
 
     // Ambil hanya bagian yang mengandung "window.SEEK_REDUX_DATA"
     const startIndex = scriptContent.indexOf("window.SEEK_REDUX_DATA = ");
@@ -30,7 +31,7 @@ async function scrapeJobData(jobType) {
       jsonString = jsonString.slice(0, endIndex);
 
       // Tambahkan logging untuk debug
-      // console.log('Extracted JSON:', jsonString);
+      logger.debug(`Extracted JSON: ${jsonString}`);
 
       try {
         const config = JSON.parse(jsonString);
@@ -47,14 +48,14 @@ async function scrapeJobData(jobType) {
           return { message: "No jobs found." };
         }
       } catch (parseError) {
-        console.error("Failed to parse JSON:", parseError);
+        logger.error(`Failed to parse JSON: ${parseError}`);
         return { message: "Failed to parse SEEK_REDUX_DATA." };
       }
     } else {
       return { message: "SEEK_REDUX_DATA not found." };
     }
   } catch (error) {
-    console.error("Error:", error);
+    logger.error(`Error: ${error}`);
     throw new Error("Error scraping data");
   }
 }

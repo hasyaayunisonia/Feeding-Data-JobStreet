@@ -4,6 +4,7 @@ const ExcelJS = require("exceljs");
 const moment = require("moment");
 const { Op } = require("sequelize");
 const cors = require("cors");
+const logger = require("./logger");
 const sequelize = require("./database");
 const Jobs = require("./models/Jobs");
 const { scrapeJobData } = require("./web-scapper");
@@ -20,7 +21,7 @@ app.use(express.json());
 
 // Sync dengan database
 sequelize.sync().then(() => {
-  console.log("Database synchronized");
+  logger.info("Database synchronized");
 });
 
 // Atur CORS untuk mengizinkan localhost:5173
@@ -318,7 +319,7 @@ app.get("/scrape-filter-data/:tag", async (req, res) => {
 
     res.status(200).json(filteredData);
   } catch (error) {
-    console.error("Error:", error.message); // Tampilkan pesan error
+    logger.error(`Error: ${error.message}`); // Tampilkan pesan error
     res
       .status(500)
       .json({ error: "Error scraping or saving data", detail: error.message });
@@ -326,12 +327,12 @@ app.get("/scrape-filter-data/:tag", async (req, res) => {
 });
 // Error handling
 app.use((err, req, res, next) => {
-  console.error(err.stack);
+  logger.error(`Error : ${err.stack}`);
   res.status(500).send("Something broke!");
 });
 
 app.listen(PORT, () => {
-  console.log(`Server is running on port http://localhost:${PORT}`);
+  logger.info(`Server is running on port http://localhost:${PORT}`);
 });
 
 module.exports = app;
